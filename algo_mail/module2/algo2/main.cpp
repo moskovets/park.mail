@@ -13,31 +13,37 @@
 #include <iostream>
 //#include <algorithm>
 using namespace std;
+template <class T>
 class CHeap {
 private:
-    int* arr;
+    T* arr;
     int n;
     void makeHeap();
 public:
     CHeap();
-    CHeap(int* a, int len);
-    void Add(int elem);
-    int Extract();
+    CHeap(T* a, int len);
+    void Add(T elem);
+    T Extract();
     bool IsEmpty();
     ~CHeap();
 };
-bool CHeap::IsEmpty() {
+
+template <class T>
+bool CHeap<T>::IsEmpty() {
     return n == 0;
 }
-CHeap::~CHeap() {
+template <class T>
+CHeap<T>::~CHeap() {
     delete[] arr;
 }
-CHeap::CHeap() {
+template <class T>
+CHeap<T>::CHeap() {
     arr = NULL;
     n = 0;
 }
-CHeap::CHeap(int *a, int len) {
-    arr = new int[len + 1];
+template <class T>
+CHeap<T>::CHeap(T *a, int len) {
+    arr = new T[len + 1];
     if(arr) {
         for (int i = 0; i < len; i++) {
             arr[i + 1] = a[i];
@@ -46,7 +52,8 @@ CHeap::CHeap(int *a, int len) {
         makeHeap();
     }
 }
-void CHeap::makeHeap() {
+template <class T>
+void CHeap<T>::makeHeap() {
     for (int i = n / 2; i >= 1; --i) {
         for (int j = i; j <= n / 2; ) {
             int k = j * 2;
@@ -62,7 +69,8 @@ void CHeap::makeHeap() {
         }
     }
 }
-void CHeap::Add(int elem) {
+template <class T>
+void CHeap<T>::Add(T elem) {
     n++;
     arr[n] = elem;
     for (int i = n; i > 0; ) {
@@ -74,8 +82,9 @@ void CHeap::Add(int elem) {
         }
     }
 }
-int CHeap::Extract() {
-    int tmp = arr[1];
+template <class T>
+T CHeap<T>::Extract() {
+    T tmp = arr[1];
     swap(arr[n], arr[1]);
     n--;
     for (int i = 1; 2 * i <= n;) {
@@ -89,7 +98,7 @@ int CHeap::Extract() {
     }
     return tmp;
 }
-int quick_addition(CHeap &heap) {
+int quick_addition(CHeap<int> &heap) {
     int res = 0;
     int x = 0, y = 0;
     while(!heap.IsEmpty()) {
@@ -112,8 +121,8 @@ int main() {
     for(int i = 0; i < n; i++) {
         cin >> a[i];
     }
-    CHeap heap(a, n);
+    CHeap<int> heap(a, n);
     cout << quick_addition(heap);
-    delete[]a;
+    delete[] a;
     return 0;
 }
