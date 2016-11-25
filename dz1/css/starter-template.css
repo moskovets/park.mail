@@ -1,0 +1,48 @@
+body {
+  padding-top: 50px;
+}
+.starter-template {
+  padding: 40px 15px;
+  text-align: center;
+}
+.image {
+	padding-right: 30px;
+}
+.container_my {
+	color: #f8f8ff;
+	margin-right: 0px;
+	padding: 0px;
+}
+.users {
+	text-decoration: underline;
+	margin-top: 10px;
+	padding-left: 20px;
+}
+.tags {
+	margin-top: 10px;
+	padding-left: 20px;
+	font: #006400;
+}
+.tag1 {
+	color: #006400;
+	font-size:30px;
+	font-family: Times;
+}
+.tag2 {
+	color: #713500;
+	font-size:20px;
+	font-family: Verdana;
+}
+.tag3 {
+	color: #001000;
+	font-size:25px;
+	font-family: Arial;
+}
+.hot {
+	text-decoration: underline;
+	margin-left: 25px;
+}
+.question {
+	margin: 20px;
+	text-decoration: underline;
+}
