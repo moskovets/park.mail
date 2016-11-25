@@ -58,7 +58,7 @@ int main() {
         cout << a[i] << " ";
     }
     delete[] a;
-    
+
     return 0;
 }
 

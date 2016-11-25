@@ -88,5 +88,6 @@ int main()
         cout << a[i].x << " " << a[i].flag_end << endl;
     }*/
     cout << segments_union_measure(a, n);
+    delete[] a;
     return 0;
 }
