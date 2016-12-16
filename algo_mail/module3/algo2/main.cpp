@@ -1,3 +1,10 @@
+/*Задача 3_2
+ * Дано число N < 106 и последовательность целых чисел из [-231..231] длиной N.
+Требуется построить бинарное дерево, заданное наивным порядком вставки.
+Т.е., при добавлении очередного числа K в дерево с корнем root, если root→Key ≤ K, то
+узел K добавляется в правое поддерево root; иначе в левое поддерево root.
+Рекурсия запрещена.
+ */
 #include <stdlib.h>
 #include <iostream>
 using namespace std;
@@ -11,7 +18,6 @@ struct element {
         left = NULL;
         right = NULL;
     }
-
 };
 //Binary search tree
 template <typename T>
@@ -120,20 +126,16 @@ void CBST<T>::delete_remove(element<T>* prev, element<T> *tmp) {
             new_elem = a;
             a = a->left;
         }
-        else if(a->right) {
-            new_elem = a;
-            a = a->right;
-        }
         else {
             break;
         }
     }
     tmp->value = a->value;
     if(new_elem->left == a) {
-        new_elem->left = NULL;
+        new_elem->left = a->right;
     }
     else {
-        new_elem->right = NULL;
+        new_elem->right = a->right;
     }
     delete a;
 }
@@ -151,7 +153,7 @@ bool CBST<T>::Remove(T x) {
             return true;
         }
         prev = tmp;
-        if(x < tmp->value) {
+        if(tmp->value < x) {
             if(tmp->right) {
                 tmp = tmp->right;
             }
