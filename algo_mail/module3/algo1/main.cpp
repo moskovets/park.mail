@@ -1,22 +1,28 @@
+/*Задача 1_1.
+ * Реализуйте структуру данных типа “множество строк” на основе динамической
+хеш-таблицы с открытой адресацией. Хранимые строки непустые и состоят из строчных латинских букв.
+Хеш-функция строки должна быть реализована с помощью вычисления значения многочлена методом Горнера.
+Начальный размер таблицы должен быть равным 8-ми. Перехеширование выполняйте
+при добавлении элементов в случае, когда коэффициент заполнения таблицы достигает 3/4.
+Структура данных должна поддерживать операции добавления строки в множество,
+удаления строки из множества и проверки принадлежности данной строки множеству.
+
+1_2.​ Для разрешения коллизий используйте двойное хеширование.
+
+ */
 #include <iostream>
-//#include <algorithm>
-//#include <stack>
 #include <queue>
 #include <assert.h>
 
 #define H1 13
 #define H2 7
-
 using namespace std;
 
-unsigned int Hash(string x, int p, int m) {
-    //if(p == H1) return 7;
-    unsigned h = (unsigned int) x[0];
-    for(int i = 1; i < x.size(); ++i) {
+unsigned int Hash(string x, int p) {
+    unsigned int h = 1;
+    for(int i = 0; i < x.size(); ++i) {
         h *= p;
-        h += (unsigned int) x[i];
-       // if(h < 0) { cout << "er" << endl; }
-        //h %= m;
+        h += (unsigned int) (x[i] - '\0');
     }
     return h;
 }
@@ -30,6 +36,11 @@ private:
     int tableSize;
     int count_of_elem;
 public:
+    void print() {
+        for(int i = 0; i < tableSize; i++) {
+            cout << status[i] << " " << table[i] << endl;
+        }
+    }
     HashTable(int Start_size) {
         tableSize = Start_size;
         table = new T [tableSize];
@@ -66,33 +77,44 @@ public:
         }
     }
     bool Insert(T k) {
-        unsigned int h1 = Hash(k, H1, tableSize);
-        unsigned int h2 = Hash(k, H2, tableSize) * 2 + 1;
-        //cout << h2 << endl;
-        for(int i = 0; i < tableSize; ++i) {
+        unsigned int h1 = Hash(k, H1);
+        unsigned int h2 = Hash(k, H2) * 2 + 1;
+
+        int insert_place = -1;
+
+        for(unsigned int i = 0; i < tableSize; ++i) {
             unsigned int j = (h1 + i * h2) % tableSize;
-            //cout << i << " " << j << table[j] << endl;
+
             if(status[j] == 1 && table[j] == k) {
                 return false;
             }
-            if(status[j] != 1) {
-                table[j] = k;
-                count_of_elem++;
-                status[j] = 1;
-                if(4 * count_of_elem > 3 * tableSize) {
-                    New_Table(tableSize * 2);
-                }
-                return true;
+            if(status[j] == 2 && insert_place == (-1)) {
+                insert_place = j;
             }
+            if(status[j] == 0) {
+                if(insert_place == -1) {
+                    insert_place = j;
+                }
+                break;
+            }
+        }
+        if(insert_place >= 0) {
+            table[insert_place] = k;
+            count_of_elem++;
+            status[insert_place] = 1;
+            if(4 * count_of_elem > 3 * tableSize) {
+                New_Table(tableSize * 2);
+            }
+            return true;
         }
         return false;
     }
     bool Search_element(T x) {
-        unsigned int h1 = Hash(x, H1, tableSize);
-        unsigned int h2 = Hash(x, H2, tableSize) * 2 + 1;
+        unsigned int h1 = Hash(x, H1);
+        unsigned int h2 = Hash(x, H2) * 2 + 1;
+
         for(int i = 0; i < tableSize; ++i) {
             unsigned int j = (h1 + i * h2) % tableSize;
-            //int j = h(x, i, tableSize);
             if(status[j] == 0) {
                 return false;
             }
@@ -103,12 +125,11 @@ public:
         return false;
     }
     bool Delete_element(T x) {
-        unsigned int h1 = Hash(x, H1, tableSize);
-        unsigned int h2 = Hash(x, H2, tableSize) * 2 + 1;
+        unsigned int h1 = Hash(x, H1);
+        unsigned int h2 = Hash(x, H2) * 2 + 1;
 
         for(int i = 0; i < tableSize; ++i) {
             unsigned int j = (h1 + i * h2) % tableSize;
-            //int j = h(x, i, tableSize);
             if((status[j] == 1) && (table[j] == x)) {
                 status[j] = 2;
                 count_of_elem--;
@@ -122,15 +143,10 @@ public:
     }
 };
 
-
-
-
 int main() {
     char ch;
     string s;
     HashTable <string> Table(8);
-    //unsigned int a = 1234567890 * 123456;
-    //cout << a << endl;
     while(cin >> ch) {
         cin >> s;
         switch(ch) {
